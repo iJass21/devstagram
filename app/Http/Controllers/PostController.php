@@ -38,13 +38,32 @@ class PostController extends Controller
             'imagen' => 'required'
         ]);
 
-        Post::create([
+        //forma 1:
+   /*     Post::create([
+            'titulo' => $request->titulo,
+            'descripcion' => $request->descripcion,
+            'imagen' => $request->imagen,
+            'user_id' => auth()->user()->id
+        ]);*/
+
+        //Otra forma:
+
+        /*$post = new Post;
+        $post->titulo = $request->titulo;
+        $post->descripcion = $request->descripcion;
+        $post->imagen = $request->imagen;
+        $post->user_id= auth()->user()->id;
+        $post->save();//es necesario el save, el anterior lo hace automatico*/
+
+        //Tercera forma: Mas al estilo de laravel
+
+        $request->user()->posts()->create([
             'titulo' => $request->titulo,
             'descripcion' => $request->descripcion,
             'imagen' => $request->imagen,
             'user_id' => auth()->user()->id
         ]);
-
+        
         return redirect()->route('posts.index', auth()->user()->username );
 
     }
