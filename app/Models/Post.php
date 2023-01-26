@@ -11,18 +11,14 @@ class Post extends Model
 
     protected $fillable = [
         'titulo',
-        'descripcion', 
+        'descripcion',
         'imagen',
         'user_id'
     ];
 
     public function user()
     {
-        return $this->belongsTo(User::class)->select(['name', 'username']);
+        return $this->belongsTo(User::class)->select('name', 'username');
     }
 
-
-
 }
-
-

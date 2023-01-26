@@ -19,8 +19,16 @@ class PostController extends Controller
     {
         //dd(auth() ->user());
         
+        //automaticamkente se situa en la tabla post
+        //paginate() es similar al get, pero solo muestra la cantidad de elementos que le pase como parametro,
+        //los otros los muestra en la siguiente pagina, hay que añadir los numeritos en el .blade
+        $posts = Post::where('user_id', $user->id)->paginate(20);
+
+        
+
         return view('dashboard', [
-            'user' => $user
+            'user' => $user,
+            'posts' => $posts
         ]);
     }
 
@@ -67,5 +75,14 @@ class PostController extends Controller
         return redirect()->route('posts.index', auth()->user()->username );
 
     }
+
+    public function show(User $user, Post $post) 
+    {
+        return view('posts.show', [
+            'post' => $post,
+        ]);
+    }
+
+
 
 }
