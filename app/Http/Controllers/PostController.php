@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Post;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class PostController extends Controller
 {
@@ -12,7 +13,8 @@ class PostController extends Controller
 
     public function __construct()
     {
-        $this->middleware('auth');
+        //se permite el acceso para los metodos de show e index, los que uno quiera, los demas si pasan por middleware
+        $this->middleware('auth')->except('show', 'index');
     }
 
     public function index(User $user)
@@ -80,9 +82,37 @@ class PostController extends Controller
     {
         return view('posts.show', [
             'post' => $post,
+            'user' => $user,
         ]);
     }
 
+    public function destroy(Post $post)
+    {
 
+        /*
+        if($post->user_id === auth()->user()->id)
+        {
+            dd('Si es la misma persona');
+        } else {
+            dd('No es la misma persona');
+        }*/
+
+        //Esta linea hace lo mismo que lo de arriba, verifica eso, pero se usa el policy creado recientemente
+        $this->authorize('delete', $post);
+        //si pasa la autorizacion entonces se prosigue
+
+
+        //Eliminando la imagen
+        $imagen_path = public_path('uploads/' . $post->imagen);
+
+        if(File::exists($imagen_path)) 
+        {
+            unlink($imagen_path);
+        }
+
+        $post->delete();
+        return redirect()->route('posts.index', auth()->user()->username);
+
+    }
 
 }
