@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\ComentarioController;
+use App\Http\Controllers\FollowerController;
+use App\Http\Controllers\HomeController;
 use App\Http\Controllers\ImagenController;
 use App\Http\Controllers\LikeController;
 use App\Http\Controllers\LoginController;
@@ -22,9 +24,18 @@ use App\Http\Controllers\RegisterController;
 |
 */
 
-Route::get('/', function () {
+//este es un router tipo clouther, pero juan no lo recomienda, se recomienda como los de abajito, es decir, usando controladores
+
+
+/*Route::get('/', function () {
     return view('principal');
-});
+});*/
+
+//Ahora el mismo metodo pero usando controladores
+
+//Route::get('/', HomeController::class)->name('home');
+Route::get('/', HomeController::class)->name('home');
+
 
 //Rutas
 
@@ -62,6 +73,10 @@ Route::delete('/posts/{post}/likes', [LikeController::class, 'destroy'])->name('
 //entonces de esta manera nos aseguramos de que pesque bien todas las rutas anteriores, y si no encuentra la que se 
 //solicita, entonces recien busca las variables.
 Route::get('/{user:username}', [PostController::class, 'index'])->name('posts.index');
+
+//Siguiendo a usuarios
+Route::post('/{user:username}/follow', [FollowerController::class, 'store'])->name('users.follow');
+Route::delete('/{user:username}/unfollow', [FollowerController::class, 'destroy'])->name('users.unfollow');
 
 
 

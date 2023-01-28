@@ -24,7 +24,7 @@ class PostController extends Controller
         //automaticamkente se situa en la tabla post
         //paginate() es similar al get, pero solo muestra la cantidad de elementos que le pase como parametro,
         //los otros los muestra en la siguiente pagina, hay que añadir los numeritos en el .blade
-        $posts = Post::where('user_id', $user->id)->paginate(20);
+        $posts = Post::where('user_id', $user->id)->latest()->paginate(20);
 
         
 
